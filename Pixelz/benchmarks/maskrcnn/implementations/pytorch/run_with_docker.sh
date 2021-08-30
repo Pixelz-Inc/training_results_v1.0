@@ -6,18 +6,15 @@ set -euxo pipefail
 : "${CONT:?CONT not set}"
 
 # Vars with defaults
-: "${NEXP:=6}"
 : "${DATESTAMP:=$(date +'%y%m%d%H%M%S%N')}"
 : "${CLEAR_CACHES:=1}"
-: "${DATADIR:=$(pwd)/datasets}"
-: "${LOGDIR:=$(pwd)/logs}"
 
 # Other vars
 readonly _config_file="./config_${PXZSYSTEM}.sh"
 readonly _logfile_base="${LOGDIR}/${DATESTAMP}"
 readonly _cont_name="object_detection"
-_cont_mounts=("--volume=${DATADIR}:/datasets" "--volume=${LOGDIR}:/logs" "--volume=/mnt/data/workspace:/workspace")
-_work_dir=("-w=/workspace/benchmarks/maskrcnn/implementations/pytorch")
+_cont_mounts=("--volume=${DATADIR}:/datasets" "--volume=${LOGDIR}:/logs")
+
 
 # MLPerf vars
 MLPERF_HOST_OS=$(
@@ -46,7 +43,7 @@ trap 'set -eux; cleanup_docker' EXIT
 nvidia-docker run --rm --init --detach \
     --net=host --uts=host --ipc=host --security-opt=seccomp=unconfined \
     --ulimit=stack=67108864 --ulimit=memlock=-1 \
-    --name="${_cont_name}" "${_work_dir}" "${_cont_mounts[@]}" \
+    --name="${_cont_name}" "${_cont_mounts[@]}" \
     "${CONT}" sleep infinity
 docker exec -it "${_cont_name}" true
 

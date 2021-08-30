@@ -3,11 +3,12 @@
 r"""
 Basic training script for PyTorch
 """
-
+'''
 import sys
 from pathlib import Path
 path = Path(sys.path[0]).parent
 sys.path.insert(1, str(path))
+'''
 
 # Set up custom environment before nearly anything else is imported
 # NOTE: this should be the first import (no not reorder)
@@ -42,7 +43,7 @@ from maskrcnn_benchmark.utils.mlperf_logger import log_end, log_start, log_event
 from maskrcnn_benchmark.utils.async_evaluator import init, get_evaluator, set_epoch_tag, get_tag
 from maskrcnn_benchmark.utils.timed_section import TimedSection
 
-import apex
+#import apex
 from fp16_optimizer import FP16_Optimizer
 
 from mlperf_logging.mllog import constants
@@ -185,8 +186,7 @@ def train(cfg, local_rank, distributed, random_number_generator=None, seed=None)
     log_event(key=constants.GRADIENT_ACCUMULATION_STEPS, value=1)
     
     model = build_detection_model(cfg)
-
-    model = apex.parallel.convert_syncbn_model(model)
+    #model = apex.parallel.convert_syncbn_model(model)
 
     device = torch.device(cfg.MODEL.DEVICE)
     model.to(device)

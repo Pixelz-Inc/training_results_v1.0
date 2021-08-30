@@ -3,8 +3,7 @@ This benchmark uses Mask R-CNN for object detection.
 
 ## Requirements
 
-* [PyTorch 21.05-py3 NGC container](https://ngc.nvidia.com/registry/nvidia-pytorch)
-* Slurm with [Pyxis](https://github.com/NVIDIA/pyxis) and [Enroot](https://github.com/NVIDIA/enroot)
+* [PyTorch 21.03-py3 NGC container](https://ngc.nvidia.com/registry/nvidia-pytorch)
 * [nvidia-docker](https://github.com/NVIDIA/nvidia-docker)
 
 # 2. Directions
@@ -39,41 +38,31 @@ Then go back to main maskrcnn repo:
 
 ### Hyperparameter settings
 
-Hyperparameters are recorded in the `config_*.sh` files for each configuration and in `run_and_time.sh`.
+Hyperparameters are recorded in the `config_PXZ.sh` files for each configuration and in `run_and_time.sh`.
 
 ### Steps to launch training
 
-1. Build the container and push to a docker registry:
 
-```
-docker build --pull -t <docker/registry>/mlperf-nvidia:object_detection .
-docker push <docker/registry>/mlperf-nvidia:object_detection
-```
+Steps required to launch single node training (assume current folder is /path/to/pytorch/)
 
-2. Launch the training:
-
+1. Build the docker image
 ```
-source config_*.sh
-CONT="<docker/registry>/mlperf-nvidia:object_detection" DATADIR=<path/to/dir/containing/coco2017/dir> LOGDIR=<path/to/output/dir> sbatch -N $DGXNNODES -t $WALLTIME run.sub
+sudo docker build --pull -t mlperf-pixelz:object_detection .
 ```
 
-#### Alternative launch with nvidia-docker
-
-When generating results for the official v1.0 submission with one node, the
-benchmark was launched onto a cluster managed by a SLURM scheduler. The
-instructions in [NVIDIA DGX A100 (single node)](#nvidia-dgx-a100-single-node) explain
-how that is done.
-
-However, to make it easier to run this benchmark on a wider set of machine
-environments, we are providing here an alternate set of launch instructions
-that can be run using nvidia-docker. Note that performance or functionality may
-vary from the tested SLURM instructions.
+2. Set directories to appropriate values in `run_benchmark.sh`, for example:
 
 ```
-docker build --pull -t mlperf-nvidia:object_detection .
-source config_DGXA100.sh
-CONT=mlperf-nvidia:object_detection DATADIR=<path/to/dir/containing/coco2017/dir> LOGDIR=<path/to/output/dir> ./run_with_docker.sh
+WORKDIR=${WORKDIR:-"/mnt/data/workspace"}
+DATADIR="${WORKDIR}/datasets"
+LOGDIR="${WORKDIR}/benchmarks/maskrcnn/implementations/pytorch/logs"
 ```
+
+3. Run the benchmark script:
+```
+sudo ./run_benchmark.sh
+```
+
 
 # 3. Dataset/Environment
 ### Publiction/Attribution.

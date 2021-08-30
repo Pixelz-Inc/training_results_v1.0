@@ -60,8 +60,6 @@ then
   fi
 fi
 
-echo ${EXTRA_CONFIG}
-
 ${LOGGER:-} "${CMD[@]}" tools/train_mlperf.py \
   ${EXTRA_PARAMS} \
   --config-file 'configs/e2e_mask_rcnn_R_50_FPN_1x.yaml' \
