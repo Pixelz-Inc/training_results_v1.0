@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WORKDIR=${WORKDIR:-"/mnt/data/workspace"}
+WORKDIR=${WORKDIR:-"/mnt/data/hieudt"}
 DATADIR="${WORKDIR}/datasets"
 LOGDIR="${WORKDIR}/benchmarks/maskrcnn/implementations/pytorch/logs"
 

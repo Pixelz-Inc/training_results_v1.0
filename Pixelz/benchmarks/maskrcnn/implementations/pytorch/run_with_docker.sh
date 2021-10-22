@@ -67,6 +67,6 @@ log_event(key=constants.CACHE_CLEAR, value=True, stack_offset=0)"
         fi
 
         # Run experiment
-        docker exec -it "${_config_env[@]}" "${_cont_name}" ./run_and_time.sh
+        docker exec -it "${_config_env[@]}" "${_cont_name}" sh ./run_and_time.sh
     ) |& tee "${_logfile_base}_${_experiment_index}.log"
 done
